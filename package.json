@@ -12,12 +12,18 @@
     "@mantine/core": "^7.3.2",
     "@mantine/form": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
+    "@mantinex/mantine-logo": "^1.0.1",
+    "@tabler/icons-react": "^2.44.0",
     "@types/react-map-gl": "^6.1.6",
+    "@vercel/postgres": "^0.5.1",
+    "bcrypt": "^5.1.1",
     "mapbox-gl": "^3.0.1",
     "next": "14.0.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
-    "react-map-gl": "^7.1.7"
+    "react-map-gl": "^7.1.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",
