@@ -2,16 +2,20 @@
 
 import { Marker } from "react-map-gl";
 import Pin from "./pin";
-import { fetchPinsData } from "../lib/data";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function MapMarkers() {
+  const router = useRouter();
+  const { category } = router.query;
   const [pins, setPins] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/pins/api");
+        const res = await fetch(
+          `/pins/api${category ? `?category=${category}` : ""}}`
+        );
         const pins = await res.json();
         setPins(pins);
       } catch (error) {
