@@ -1,21 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { useState, useCallback } from "react";
-import { createRoot } from "react-dom/client";
-import Map, { Marker, NavigationControl } from "react-map-gl";
+import { useState, useEffect, useRef } from "react";
+import Map, { Marker, NavigationControl, GeolocateControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import ControlPanel from "./control-panel";
 import Pin from "./pin";
-
-import type { MarkerDragEvent, LngLat } from "react-map-gl";
+import MapMarkers from "./marker";
+import { fetchPinsData } from "../lib/data";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-export default function App() {
-  const [events, logEvents] = useState<Record<string, LngLat>>({});
-
+export default function MapComponent() {
   const [showMarker, setShowMarker] = useState(true);
 
   const handleShowMarker = () => {
@@ -36,6 +33,13 @@ export default function App() {
     setViewState({ ...viewState, longitude: long });
   };
 
+  const geoControlRef = useRef<mapboxgl.GeolocateControl>();
+
+  useEffect(() => {
+    // Activate as soon as the control is loaded
+    geoControlRef.current?.trigger();
+  }, [geoControlRef.current]);
+
   return (
     <>
       <Map
@@ -45,11 +49,11 @@ export default function App() {
           top: 0,
           left: 0,
         }}
-        {...viewState}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         mapboxAccessToken={TOKEN}
         onMove={(e) => setViewState(e.viewState)}
       >
+        <GeolocateControl position="top-right" ref={geoControlRef} />
         {showMarker ? (
           <Marker
             longitude={viewState.longitude}
@@ -61,6 +65,7 @@ export default function App() {
         ) : (
           <></>
         )}
+        <MapMarkers />
 
         <NavigationControl />
       </Map>
