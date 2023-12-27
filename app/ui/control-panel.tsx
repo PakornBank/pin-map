@@ -13,7 +13,7 @@ function round5(value: number) {
   return (Math.round(value * 1e5) / 1e5).toFixed(5);
 }
 
-function isValidLat(value) {
+function isValidLat(value: number) {
   if (value < -90 || value > 90) {
     // return "Latitude must be between -90 and 90";
     return false;
@@ -25,7 +25,7 @@ function isValidLat(value) {
   return true;
 }
 
-function isValidLong(value) {
+function isValidLong(value: number) {
   if (value < -180 || value > 180) {
     // return "Longitude must be between -180 and 180";
     return false;

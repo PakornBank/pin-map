@@ -8,13 +8,14 @@ import { useRouter } from "next/router";
 export default function MapMarkers() {
   const router = useRouter();
   const { category } = router.query;
+  // const category = "category1";
   const [pins, setPins] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `/pins/api${category ? `?category=${category}` : ""}}`
+          `/pins/api${category ? `?category=${category}` : ""}`
         );
         const pins = await res.json();
         setPins(pins);
