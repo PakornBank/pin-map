@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createRef } from "react";
 import Map, { Marker, NavigationControl, GeolocateControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -33,7 +33,7 @@ export default function MapComponent() {
     setViewState({ ...viewState, longitude: long });
   };
 
-  const geoControlRef = useRef<mapboxgl.GeolocateControl>();
+  const geoControlRef = createRef<mapboxgl.GeolocateControl>();
 
   useEffect(() => {
     // Activate as soon as the control is loaded

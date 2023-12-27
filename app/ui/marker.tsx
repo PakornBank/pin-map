@@ -5,11 +5,17 @@ import Pin from "./pin";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
+interface PinData {
+  id: string;
+  longitude: number;
+  latitude: number;
+}
+
 export default function MapMarkers() {
   const router = useRouter();
   const { category } = router.query;
   // const category = "category1";
-  const [pins, setPins] = useState([]);
+  const [pins, setPins] = useState<PinData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

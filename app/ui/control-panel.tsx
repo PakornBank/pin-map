@@ -79,7 +79,7 @@ function ControlPanel(props: ControlPanelProps) {
       <NumberInput
         value={round5(latitude)}
         onChange={(newValue) => {
-          if (isValidLat(newValue)) {
+          if (isValidLat(+newValue)) {
             handleChangeLat(+newValue);
           }
         }}
@@ -91,7 +91,7 @@ function ControlPanel(props: ControlPanelProps) {
         mb={10}
         value={round5(longitude)}
         onChange={(newValue) => {
-          if (isValidLong(newValue)) {
+          if (isValidLong(+newValue)) {
             handleChangeLong(+newValue);
           }
         }}
