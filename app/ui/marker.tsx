@@ -3,7 +3,7 @@
 import { Marker } from "react-map-gl";
 import Pin from "./pin";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 interface PinData {
   id: string;
@@ -12,9 +12,8 @@ interface PinData {
 }
 
 export default function MapMarkers() {
-  const router = useRouter();
-  const { category } = router.query;
-  // const category = "category1";
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category");
   const [pins, setPins] = useState<PinData[]>([]);
 
   useEffect(() => {
