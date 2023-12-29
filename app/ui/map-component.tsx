@@ -8,7 +8,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import ControlPanel from "./control-panel";
 import Pin from "./pin";
 import MapMarkers from "./marker";
-import { fetchPinsData } from "../lib/data";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -20,9 +19,9 @@ export default function MapComponent() {
   };
 
   const [viewState, setViewState] = useState({
-    longitude: -100,
-    latitude: 40,
-    zoom: 3.5,
+    longitude: 0,
+    latitude: 0,
+    zoom: 0,
   });
 
   const handleChangeLat = (lat: number) => {
@@ -36,9 +35,8 @@ export default function MapComponent() {
   const geoControlRef = createRef<mapboxgl.GeolocateControl>();
 
   useEffect(() => {
-    // Activate as soon as the control is loaded
     geoControlRef.current?.trigger();
-  }, [geoControlRef.current]);
+  }, [geoControlRef]);
 
   return (
     <>
