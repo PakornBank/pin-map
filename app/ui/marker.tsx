@@ -26,7 +26,6 @@ export default function MapMarkers() {
           `/api/pins${category ? `?category=${category}` : ""}`
         );
         const pins = await res.json();
-        console.log(pins);
         setPins(pins);
       } catch (error) {
         console.log(error);
