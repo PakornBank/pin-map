@@ -18,6 +18,7 @@
     "@vercel/postgres": "^0.5.1",
     "bcrypt": "^5.1.1",
     "mapbox-gl": "^3.0.1",
+    "maplibre-gl": "^3.6.2",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "pg": "^8.11.3",
