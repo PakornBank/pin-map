@@ -1,18 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useRef, createRef } from "react";
-import Map, { Marker, NavigationControl, GeolocateControl } from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useState, useEffect, useRef } from "react";
+import Map, {
+  Marker,
+  NavigationControl,
+  GeolocateControl,
+  Popup,
+} from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
+import "./maplibregl-popup-content.css";
 
 import ControlPanel from "./control-panel";
 import Pin from "./pin";
 import MapMarkers from "./marker";
-
-const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+import PopupCard from "./popup-card";
 
 export default function MapComponent() {
   const [showMarker, setShowMarker] = useState(true);
+  const [popupInfo, setPopupInfo] = useState(null);
 
   const handleShowMarker = () => {
     setShowMarker(!showMarker);
@@ -32,27 +38,24 @@ export default function MapComponent() {
     setViewState({ ...viewState, longitude: long });
   };
 
-  const geoControlRef = createRef<mapboxgl.GeolocateControl>();
-
+  const geoControlRef = useRef<maplibregl.GeolocateControl | null>(null);
   useEffect(() => {
+    // make geolocate trigger on load
     geoControlRef.current?.trigger();
-  }, [geoControlRef]);
+  }, [geoControlRef.current]);
 
   return (
     <>
       <Map
-        {...viewState}
         style={{
           height: "100%",
           position: "absolute",
           top: 0,
           left: 0,
         }}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        mapboxAccessToken={TOKEN}
+        mapStyle="https://api.maptiler.com/maps/streets/style.json?key=g9SJCPMB2ji0vRCDxrAw"
         onMove={(e) => setViewState(e.viewState)}
       >
-        <GeolocateControl position="top-right" ref={geoControlRef} />
         {showMarker ? (
           <Marker
             longitude={viewState.longitude}
@@ -64,8 +67,24 @@ export default function MapComponent() {
         ) : (
           <></>
         )}
-        <MapMarkers />
-
+        <MapMarkers setPopupInfo={setPopupInfo} />
+        {popupInfo && (
+          <Popup
+            anchor="top"
+            longitude={Number((popupInfo as any).longitude)}
+            latitude={Number((popupInfo as any).latitude)}
+            closeOnClick={false}
+            onClose={() => setPopupInfo(null)}
+          >
+            <PopupCard popupInfo={popupInfo}></PopupCard>
+          </Popup>
+        )}
+        <GeolocateControl
+          positionOptions={{ enableHighAccuracy: true }}
+          trackUserLocation={true}
+          showUserLocation={true}
+          ref={geoControlRef}
+        />
         <NavigationControl />
       </Map>
       <ControlPanel
