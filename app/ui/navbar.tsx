@@ -33,7 +33,8 @@ export default function NavbarSimple() {
         const res = await fetch(`/api/category`);
         let categories = await res.json();
         // turn array of objects into array of strings
-        categories = categories.map((category) => {
+        // categoris is array of object with key category
+        categories = categories.map((category: { category: string }) => {
           return category.category;
         });
         console.log(categories);

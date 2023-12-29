@@ -4,7 +4,6 @@ import { Marker } from "react-map-gl";
 import Pin from "./pin";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { set } from "mongoose";
 
 interface PinData {
   id: string;
