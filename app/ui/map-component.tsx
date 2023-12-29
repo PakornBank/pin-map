@@ -43,6 +43,7 @@ export default function MapComponent() {
   return (
     <>
       <Map
+        {...viewState}
         style={{
           height: "100%",
           position: "absolute",
