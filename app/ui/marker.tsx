@@ -3,7 +3,8 @@
 import { Marker } from "react-map-gl";
 import Pin from "./pin";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { set } from "mongoose";
 
 interface PinData {
   id: string;
@@ -12,24 +13,28 @@ interface PinData {
 }
 
 export default function MapMarkers() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const category = searchParams.get("category");
+
   const [pins, setPins] = useState<PinData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setPins([]);
       try {
+        const category = searchParams.get("category");
         const res = await fetch(
-          `/pins/api${category ? `?category=${category}` : ""}`
+          `/api/pins${category ? `?category=${category}` : ""}`
         );
         const pins = await res.json();
+        console.log(pins);
         setPins(pins);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   return (
     <>

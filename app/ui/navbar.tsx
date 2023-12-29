@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconGauge,
   IconFingerprint,
   IconActivity,
   IconChevronRight,
 } from "@tabler/icons-react";
-import { Box, Flex, NavLink, Stack } from "@mantine/core";
+import { Button, Flex, NavLink, Stack, Autocomplete } from "@mantine/core";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 const data = [
   { icon: IconGauge, label: "Dashboard", description: "Item with description" },
   {
@@ -20,44 +21,68 @@ const data = [
 ];
 
 export default function NavbarSimple() {
-  const [active, setActive] = useState(0);
+  const router = useRouter();
 
-  const items = data.map((item, index) => (
-    <NavLink
-      component={Link}
-      href="#required-for-focus"
-      key={item.label}
-      active={index === active}
-      label={item.label}
-      description={item.description}
-      rightSection={item.rightSection}
-      // icon={<item.icon size="1rem" stroke={1.5} />}
-      onClick={() => setActive(index)}
-      color="gray"
-    />
-  ));
+  const [category, setCategory] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/category`);
+        let categories = await res.json();
+        // turn array of objects into array of strings
+        categories = categories.map((category) => {
+          return category.category;
+        });
+        console.log(categories);
+        setCategory(categories);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
-    <Flex
-      direction="column"
-      w={220}
-      h={"100vh"}
-      bg={"white"}
-      justify={"space-between"}
-      gap={"xl"}
-      pos={"absolute"}
-      style={{ zIndex: 10 }}
-    >
-      <Stack gap={0}>{items}</Stack>
-      <Stack gap={0}>
-        <NavLink
-          component={Link}
-          href="#required-for-focus"
-          label="Logout"
-          rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
-          color="gray"
-        />
-      </Stack>
-    </Flex>
+    <>
+      <Flex
+        direction="column"
+        w={220}
+        h={"100vh"}
+        bg={"white"}
+        justify={"space-between"}
+        gap={"xl"}
+        pos={"absolute"}
+        style={{ zIndex: 10 }}
+      >
+        <Stack gap={0} px={10}>
+          <Autocomplete
+            label="Select Category"
+            placeholder="Pick or enter category"
+            data={category}
+            maxDropdownHeight={200}
+            onChange={setSelectedCategory}
+          />
+          <Button
+            onClick={() => {
+              router.push(`?category=${selectedCategory}`);
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+        <Stack gap={0}>
+          <NavLink
+            component={Link}
+            href="#required-for-focus"
+            label="Logout"
+            rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
+            color="gray"
+          />
+        </Stack>
+      </Flex>
+    </>
   );
 }
