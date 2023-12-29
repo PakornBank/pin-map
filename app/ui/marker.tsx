@@ -2,7 +2,7 @@
 
 import { Marker } from "react-map-gl";
 import Pin from "./pin";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 interface PinData {
@@ -11,22 +11,25 @@ interface PinData {
   latitude: number;
 }
 
-export default function MapMarkers() {
-  const router = useRouter();
+export default function MapMarkers({
+  setPopupInfo,
+}: {
+  setPopupInfo: (info: any) => void;
+}) {
   const searchParams = useSearchParams();
-
-  const [pins, setPins] = useState<PinData[]>([]);
+  const [pinsData, setPinsData] = useState<PinData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setPins([]);
+      setPinsData([]);
       try {
         const category = searchParams.get("category");
         const res = await fetch(
           `/api/pins${category ? `?category=${category}` : ""}`
         );
         const pins = await res.json();
-        setPins(pins);
+        console.log(pins);
+        setPinsData(pins);
       } catch (error) {
         console.log(error);
       }
@@ -34,18 +37,24 @@ export default function MapMarkers() {
     fetchData();
   }, [searchParams]);
 
-  return (
-    <>
-      {pins.map((marker) => (
+  const pins = useMemo(
+    () =>
+      pinsData.map((city) => (
         <Marker
-          key={marker.id}
-          longitude={marker.longitude}
-          latitude={marker.latitude}
+          key={city.id}
+          longitude={city.longitude}
+          latitude={city.latitude}
           anchor="bottom"
+          onClick={(e) => {
+            e.originalEvent.stopPropagation();
+            setPopupInfo(city);
+          }}
         >
           <Pin size={20} />
         </Marker>
-      ))}
-    </>
+      )),
+    [pinsData, setPopupInfo]
   );
+
+  return <>{pins}</>;
 }
