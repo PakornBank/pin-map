@@ -3,7 +3,6 @@ import { sql } from "@vercel/postgres";
 export async function GET(request: Request) {
   try {
     const query = new URL(request.url).searchParams;
-    console.log(query.get("category"));
     const category = query.get("category");
     if (!category) {
       const data = await sql`SELECT * FROM pins`;
