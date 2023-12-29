@@ -10,35 +10,26 @@ import {
 import { Button, Flex, NavLink, Stack, Autocomplete } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-const data = [
-  { icon: IconGauge, label: "Dashboard", description: "Item with description" },
-  {
-    icon: IconFingerprint,
-    label: "Security",
-    rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
-  },
-  { icon: IconActivity, label: "Activity" },
-];
+import { useForm } from "@mantine/form";
 
 export default function NavbarSimple() {
+  const form = useForm({
+    initialValues: { category: "" },
+  });
+
   const router = useRouter();
 
-  const [category, setCategory] = useState([]);
-
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(`/api/category`);
         let categories = await res.json();
-        // turn array of objects into array of strings
-        // categoris is array of object with key category
         categories = categories.map((category: { category: string }) => {
           return category.category;
         });
-        console.log(categories);
-        setCategory(categories);
+        setCategories(categories);
       } catch (error) {
         console.log(error);
       }
@@ -46,34 +37,37 @@ export default function NavbarSimple() {
     fetchData();
   }, []);
 
+  const handleSubmit = (category: string) => {
+    router.push(category.length > 0 ? `?category=${category}` : "?");
+  };
+
   return (
     <>
       <Flex
         direction="column"
+        py={10}
         w={220}
         h={"100vh"}
         bg={"white"}
         justify={"space-between"}
-        gap={"xl"}
         pos={"absolute"}
         style={{ zIndex: 10 }}
       >
-        <Stack gap={0} px={10}>
-          <Autocomplete
-            label="Select Category"
-            placeholder="Pick or enter category"
-            data={category}
-            maxDropdownHeight={200}
-            onChange={setSelectedCategory}
-          />
-          <Button
-            onClick={() => {
-              router.push(`?category=${selectedCategory}`);
-            }}
-          >
-            Search
-          </Button>
-        </Stack>
+        <form
+          onSubmit={form.onSubmit((values) => handleSubmit(values.category))}
+        >
+          <Stack gap={"md"} px={10}>
+            <Autocomplete
+              label="Select Category"
+              placeholder="Pick or enter category"
+              data={categories}
+              maxDropdownHeight={200}
+              {...form.getInputProps("category")}
+            />
+            <Button type="submit">Search</Button>
+          </Stack>
+        </form>
+
         <Stack gap={0}>
           <NavLink
             component={Link}
