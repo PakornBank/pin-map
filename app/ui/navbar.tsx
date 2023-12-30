@@ -98,7 +98,7 @@ export default function NavbarSimple() {
           ) : (
             <NavLink
               component={Link}
-              href="/login"
+              href="/api/auth/signin"
               label="Login"
               rightSection={<IconChevronRight size="1rem" stroke={1.5} />}
               color="gray"
