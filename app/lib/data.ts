@@ -9,3 +9,13 @@ export async function fetchPinsData() {
     return [];
   }
 }
+
+export async function findUserByEmail(email: string) {
+  try {
+    const data = await sql`SELECT * FROM users WHERE email = ${email}`;
+    return data.rows[0];
+  } catch (error) {
+    console.error("Failed to find user:", error);
+    return null;
+  }
+}
