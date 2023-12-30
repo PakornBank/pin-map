@@ -12,7 +12,6 @@ export default function LoginForm() {
   }
 
   if (status === "authenticated") {
-    console.log(session);
     return redirect("/map");
   }
 
