@@ -6,8 +6,13 @@ import {
   Button,
   NumberInput,
   Text,
+  Box,
+  NavLink,
 } from "@mantine/core";
+import Link from "next/link";
 import { useForm } from "@mantine/form";
+import { useSession } from "next-auth/react";
+import redirect from "next/navigation";
 
 function round5(value: number) {
   return (Math.round(value * 1e5) / 1e5).toFixed(5);
@@ -46,6 +51,7 @@ interface ControlPanelProps {
 }
 
 function ControlPanel(props: ControlPanelProps) {
+  const { data: session, status } = useSession();
   const {
     longitude,
     latitude,
@@ -64,7 +70,7 @@ function ControlPanel(props: ControlPanelProps) {
   //   },
   // });
 
-  return (
+  return status === "authenticated" ? (
     <Stack
       className="control-panel"
       style={{ position: "absolute", top: "10px", right: "50px" }}
@@ -102,6 +108,16 @@ function ControlPanel(props: ControlPanelProps) {
 
       <Button onClick={handleShowMarker}>toggle marker</Button>
     </Stack>
+  ) : (
+    <Button
+      style={{ position: "absolute", top: "10px", right: "50px" }}
+      w={180}
+      component={Link}
+      href="/api/auth/signin"
+      color="grey"
+    >
+      Sign in to pin location
+    </Button>
   );
 }
 
