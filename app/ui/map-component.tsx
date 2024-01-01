@@ -46,6 +46,7 @@ export default function MapComponent() {
       );
       const pins = await res.json();
       setPinsData(pins);
+      setPopupInfo(null);
       // console.log(pins);
     } catch (error) {
       console.log(error);
@@ -116,7 +117,7 @@ export default function MapComponent() {
             closeOnClick={false}
             onClose={() => setPopupInfo(null)}
           >
-            <PopupCard popupInfo={popupInfo}></PopupCard>
+            <PopupCard popupInfo={popupInfo} fetchPins={fetchPins}></PopupCard>
           </Popup>
         )}
         <GeolocateControl
