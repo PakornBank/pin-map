@@ -2,6 +2,18 @@ import NextAuth, { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { findUserByEmail } from "@/app/lib/data";
 import { createUser } from "@/app/lib/actions";
+import { Session } from "next-auth";
+
+interface ExtendedUser {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+interface ExtendedSession extends Session {
+  user: ExtendedUser;
+}
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -12,11 +24,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }): Promise<string | boolean> {
+      // console.log(profile);
       if (account?.provider === "github") {
         const email = user.email;
         let existingUser = await findUserByEmail(email ?? "");
         if (!existingUser) {
-          console.log("Creating user:", email);
+          // console.log("Creating user:", email);
           existingUser = await createUser(
             email ?? "",
             user.name ?? "",
@@ -24,13 +37,22 @@ export const authOptions: AuthOptions = {
           );
         }
         if (existingUser) {
-          console.log("User found:", existingUser);
+          // console.log("User found:", existingUser);
           user.id = existingUser.id;
           return true;
         }
       }
-      console.log("Failed to sign in:", user);
+      // console.log("Failed to sign in:", user);
       return false;
+    },
+
+    async session({ session, user }): Promise<ExtendedSession> {
+      const extendedSession = session as ExtendedSession;
+      const existingUser = await findUserByEmail(session?.user?.email ?? "");
+      if (existingUser) {
+        extendedSession.user.id = existingUser.id;
+      }
+      return extendedSession;
     },
   },
 };
