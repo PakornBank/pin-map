@@ -17,6 +17,17 @@ export async function fetchPinsData() {
   }
 }
 
+export async function fetchPinDataById(id: number) {
+  noStore();
+  try {
+    const data = await sql`SELECT * FROM pins WHERE id = ${id}`;
+    return data.rows[0];
+  } catch (error) {
+    console.error("Failed to fetch pin:", error);
+    return null;
+  }
+}
+
 export async function findUserByEmail(email: string) {
   noStore();
   try {
