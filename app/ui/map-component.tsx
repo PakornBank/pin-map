@@ -17,6 +17,7 @@ import Pin from "./pin";
 import MapMarkers from "./marker";
 import PopupCard from "./popup-card";
 import PopupForm from "./popup-form";
+import { Box } from "@mantine/core";
 
 export default function MapComponent() {
   const [showMarker, setShowMarker] = useState(false);
@@ -37,7 +38,7 @@ export default function MapComponent() {
 
   const fetchPins = async () => {
     // console.log("fetching pins");
-    setPinsData([]);
+    // setPinsData([]);
     try {
       const category = searchParams.get("category");
       const res = await fetch(
@@ -92,18 +93,23 @@ export default function MapComponent() {
             >
               <Pin size={20} />
             </Marker>
-            <Popup
-              anchor="top"
-              longitude={viewState.longitude}
-              latitude={viewState.latitude}
+            <Box
+              pos={"absolute"}
+              style={{
+                zIndex: 10,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, 15px)",
+              }}
             >
               {/* <PopupCard popupInfo={popupInfo}></PopupCard> */}
               <PopupForm
                 latitude={viewState.latitude}
                 longitude={viewState.longitude}
                 fetchPins={fetchPins}
+                setShowMarker={setShowMarker}
               ></PopupForm>
-            </Popup>
+            </Box>
           </>
         ) : (
           <></>
@@ -114,10 +120,14 @@ export default function MapComponent() {
             anchor="top"
             longitude={Number((popupInfo as any).longitude)}
             latitude={Number((popupInfo as any).latitude)}
-            closeOnClick={false}
+            // closeOnClick={false}
             onClose={() => setPopupInfo(null)}
           >
-            <PopupCard popupInfo={popupInfo} fetchPins={fetchPins}></PopupCard>
+            <PopupCard
+              popupInfo={popupInfo}
+              fetchPins={fetchPins}
+              setPopupInfo={setPopupInfo}
+            ></PopupCard>
           </Popup>
         )}
         <GeolocateControl
