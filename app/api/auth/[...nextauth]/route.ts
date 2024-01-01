@@ -55,7 +55,7 @@ const authOptions: NextAuthOptions = {
       if (existingUser) {
         session.user.id = existingUser.id;
       }
-      console.log("Session user:", session.user);
+      // console.log("Session user:", session.user);
       return session;
     },
   },
