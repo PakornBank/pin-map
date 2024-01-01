@@ -64,11 +64,12 @@ export default function NavbarSimple() {
         justify={"space-between"}
         pos={"absolute"}
         style={{ zIndex: 10 }}
+        px={10}
       >
         <form
           onSubmit={form.onSubmit((values) => handleSubmit(values.category))}
         >
-          <Stack gap={"md"} px={10}>
+          <Stack gap={"md"}>
             <Autocomplete
               label="Select Category"
               placeholder="Pick or enter category"
