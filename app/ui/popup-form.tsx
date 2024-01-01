@@ -8,19 +8,26 @@ import {
   Flex,
   Checkbox,
   Button,
+  Autocomplete,
 } from "@mantine/core";
 import { createPin } from "../lib/actions";
+import { useState, useEffect, use } from "react";
 
 export default function PopupForm({
   latitude,
   longitude,
   fetchPins,
+  setShowMarker,
 }: {
   latitude: number;
   longitude: number;
   fetchPins: () => void;
+  setShowMarker: (show: boolean) => void;
 }) {
   const { data: session, status } = useSession();
+
+  const [categories, setCategories] = useState([]);
+
   const form = useForm({
     initialValues: {
       image_url: "",
@@ -39,11 +46,27 @@ export default function PopupForm({
       const res = await createPin(formValues);
       console.log("done!", res);
       form.reset();
+      setShowMarker(false);
       fetchPins();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchCategories = async () => {
+    const res = await fetch(`/api/category`, {
+      cache: "no-store",
+    });
+    const data = await res.json();
+    const categories = data.map((category: { category: string }) => {
+      return category.category;
+    });
+    setCategories(categories);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   if (status !== "authenticated") {
     return <></>;
@@ -71,10 +94,12 @@ export default function PopupForm({
             required
             {...form.getInputProps("description")}
           />
-          <TextInput
-            label="Category"
-            placeholder="Category"
+          <Autocomplete
+            label="Select Category"
+            placeholder="Pick or enter category"
             required
+            data={categories}
+            maxDropdownHeight={200}
             {...form.getInputProps("category")}
           />
           <Flex direction="row" gap={10}>
