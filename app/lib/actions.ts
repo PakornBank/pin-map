@@ -46,6 +46,46 @@ export async function createPin({
   }
 }
 
+export async function editPin({
+  pin_id,
+  image_url,
+  pin_name,
+  category,
+  is_active,
+  description,
+}: {
+  pin_id: number;
+  image_url: string;
+  pin_name: string;
+  category: string;
+  is_active: boolean;
+  description: string;
+}) {
+  try {
+    console.log(
+      "pin_id:",
+      pin_id,
+      "image_url:",
+      image_url,
+      "pin_name:",
+      pin_name,
+      "category:",
+      category,
+      "is_active:",
+      is_active,
+      "description:",
+      description
+    );
+    const data =
+      await sql`UPDATE pins SET image_url = ${image_url}, pin_name = ${pin_name}, category = ${category}, is_active = ${is_active}, description = ${description} WHERE id = ${pin_id} RETURNING *`;
+    console.log("edited pin:", data.rows[0]);
+    return data.rows[0];
+  } catch (error) {
+    console.error("Failed to edit pin:", error);
+    return null;
+  }
+}
+
 export async function deletePin(pin_id: number, user_id: string) {
   try {
     const data =
