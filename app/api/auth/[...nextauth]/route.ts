@@ -15,7 +15,7 @@ interface ExtendedSession extends Session {
   user: ExtendedUser;
 }
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
