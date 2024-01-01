@@ -4,18 +4,18 @@ import { findUserByEmail } from "@/app/lib/data";
 import { createUser } from "@/app/lib/actions";
 import { Session } from "next-auth";
 
-interface ExtendedUser {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-}
+// interface ExtendedUser {
+//   id: string;
+//   name?: string | null;
+//   email?: string | null;
+//   image?: string | null;
+// }
 
-interface ExtendedSession extends Session {
-  user: ExtendedUser;
-}
+// interface ExtendedSession extends Session {
+//   user: ExtendedUser;
+// }
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -46,13 +46,14 @@ const authOptions: AuthOptions = {
       return false;
     },
 
-    async session({ session, user }): Promise<ExtendedSession> {
-      const extendedSession = session as ExtendedSession;
+    async session({ session, user }) {
+      // const extendedSession = session as ExtendedSession;
       const existingUser = await findUserByEmail(session?.user?.email ?? "");
       if (existingUser) {
-        extendedSession.user.id = existingUser.id;
+        session.user.id = existingUser.id;
       }
-      return extendedSession;
+      console.log("Session user:", session.user);
+      return session;
     },
   },
 };
