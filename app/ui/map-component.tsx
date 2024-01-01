@@ -10,14 +10,16 @@ import Map, {
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./maplibregl-popup-content.css";
+import { useSearchParams } from "next/navigation";
 
 import ControlPanel from "./control-panel";
 import Pin from "./pin";
 import MapMarkers from "./marker";
 import PopupCard from "./popup-card";
+import PopupForm from "./popup-form";
 
 export default function MapComponent() {
-  const [showMarker, setShowMarker] = useState(true);
+  const [showMarker, setShowMarker] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
 
   const handleShowMarker = () => {
@@ -29,6 +31,30 @@ export default function MapComponent() {
     latitude: 0,
     zoom: 0,
   });
+
+  const searchParams = useSearchParams();
+  const [pinsData, setPinsData] = useState([]);
+
+  const fetchPins = async () => {
+    // console.log("fetching pins");
+    setPinsData([]);
+    try {
+      const category = searchParams.get("category");
+      const res = await fetch(
+        `/api/pins${category ? `?category=${category}` : ""}`,
+        { cache: "no-store" }
+      );
+      const pins = await res.json();
+      setPinsData(pins);
+      // console.log(pins);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPins();
+  }, [searchParams]);
 
   const handleChangeLat = (lat: number) => {
     setViewState({ ...viewState, latitude: lat });
@@ -57,17 +83,31 @@ export default function MapComponent() {
         onMove={(e) => setViewState(e.viewState)}
       >
         {showMarker ? (
-          <Marker
-            longitude={viewState.longitude}
-            latitude={viewState.latitude}
-            anchor="bottom"
-          >
-            <Pin size={20} />
-          </Marker>
+          <>
+            <Marker
+              longitude={viewState.longitude}
+              latitude={viewState.latitude}
+              anchor="bottom"
+            >
+              <Pin size={20} />
+            </Marker>
+            <Popup
+              anchor="top"
+              longitude={viewState.longitude}
+              latitude={viewState.latitude}
+            >
+              {/* <PopupCard popupInfo={popupInfo}></PopupCard> */}
+              <PopupForm
+                latitude={viewState.latitude}
+                longitude={viewState.longitude}
+                fetchPins={fetchPins}
+              ></PopupForm>
+            </Popup>
+          </>
         ) : (
           <></>
         )}
-        <MapMarkers setPopupInfo={setPopupInfo} />
+        <MapMarkers setPopupInfo={setPopupInfo} pinsData={pinsData} />
         {popupInfo && (
           <Popup
             anchor="top"
