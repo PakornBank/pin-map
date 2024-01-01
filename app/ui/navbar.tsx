@@ -36,7 +36,7 @@ export default function NavbarSimple() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/category`);
+        const res = await fetch(`/api/category`, { cache: "no-store" });
         let categories = await res.json();
         categories = categories.map((category: { category: string }) => {
           return category.category;
