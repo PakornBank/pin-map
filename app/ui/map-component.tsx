@@ -68,7 +68,7 @@ export default function MapComponent() {
   useEffect(() => {
     // make geolocate trigger on load
     geoControlRef.current?.trigger();
-  }, [geoControlRef.current]);
+  }, []);
 
   return (
     <>
