@@ -2,7 +2,7 @@ import { Card, Image, Text, Badge, Group } from "@mantine/core";
 import { formatDateTime } from "../lib/utils";
 
 export default function PopupCardDisplay({ popupInfo }: { popupInfo: any }) {
-  console.log(popupInfo);
+  // console.log(popupInfo);
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder>
       <Card.Section>

@@ -44,7 +44,6 @@ export default function PopupForm({
     formValues.longitude = longitude;
     try {
       const res = await createPin(formValues);
-      console.log("done!", res);
       form.reset();
       setShowMarker(false);
       fetchPins();

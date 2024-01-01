@@ -18,7 +18,7 @@ export default function PopupCardDelete({
   const handleDelete = async () => {
     try {
       const res = await deletePin(popupId, userId);
-      console.log("done!", res);
+      // console.log("done!", res);
       setIsDeleting(false);
       setPopupInfo(null);
       fetchPins();

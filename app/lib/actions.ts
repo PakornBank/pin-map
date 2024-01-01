@@ -37,8 +37,6 @@ export async function createPin({
       await sql`INSERT INTO pins (image_url, pin_name, category, is_active, description, user_id, latitude, longitude) VALUES (${image_url}, ${pin_name}, ${category}, ${is_active}, ${description}, ${user_id}, ${latitude}, ${longitude}) RETURNING *`;
     const updateUser =
       await sql`UPDATE users SET pin_ids = array_append(pin_ids, ${data.rows[0].id}) WHERE id = ${user_id};`;
-    console.log("uploaded pin:", data.rows[0]);
-    console.log("updated user:", updateUser.rows[0]);
     return data.rows[0];
   } catch (error) {
     console.error("Failed to create pin:", error);
@@ -62,23 +60,8 @@ export async function editPin({
   description: string;
 }) {
   try {
-    console.log(
-      "pin_id:",
-      pin_id,
-      "image_url:",
-      image_url,
-      "pin_name:",
-      pin_name,
-      "category:",
-      category,
-      "is_active:",
-      is_active,
-      "description:",
-      description
-    );
     const data =
       await sql`UPDATE pins SET image_url = ${image_url}, pin_name = ${pin_name}, category = ${category}, is_active = ${is_active}, description = ${description} WHERE id = ${pin_id} RETURNING *`;
-    console.log("edited pin:", data.rows[0]);
     return data.rows[0];
   } catch (error) {
     console.error("Failed to edit pin:", error);
