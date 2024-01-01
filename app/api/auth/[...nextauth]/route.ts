@@ -23,7 +23,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }): Promise<string | boolean> {
+    async signIn({ user, account, profile }) {
       // console.log(profile);
       if (account?.provider === "github") {
         const email = user.email;
