@@ -35,15 +35,14 @@ export default function PopupForm({
   const handleSubmit = async (formValues: any) => {
     formValues.latitude = latitude;
     formValues.longitude = longitude;
-    console.log(formValues);
-    // try {
-    //   const res = await createPin(formValues);
-    //   console.log(res);
-    //   form.reset();
-    //   fetchPins();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const res = await createPin(formValues);
+      console.log("done!", res);
+      form.reset();
+      fetchPins();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (status !== "authenticated") {
