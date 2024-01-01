@@ -1,8 +1,15 @@
 import { sql } from "@vercel/postgres";
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function fetchPinsData() {
+  noStore();
   try {
-    const data = await sql`SELECT * FROM pins`;
+    const data = await sql`SELECT 
+    pins.*, 
+    users.name 
+    FROM pins 
+    INNER JOIN 
+    users ON pins.user_id = users.id;`;
     return data.rows;
   } catch (error) {
     console.error("Failed to fetch pins:", error);
@@ -11,6 +18,7 @@ export async function fetchPinsData() {
 }
 
 export async function findUserByEmail(email: string) {
+  noStore();
   try {
     const data = await sql`SELECT * FROM users WHERE email = ${email}`;
     return data.rows[0];
