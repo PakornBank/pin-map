@@ -1,4 +1,4 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { findUserByEmail } from "@/app/lib/data";
 import { createUser } from "@/app/lib/actions";
@@ -15,7 +15,10 @@ import { Session } from "next-auth";
 //   user: ExtendedUser;
 // }
 
-export const authOptions: AuthOptions = {
+const authOptions: NextAuthOptions = {
+  // session: {
+  //   strategy: "jwt",
+  // },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -58,6 +61,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
