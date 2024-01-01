@@ -2,8 +2,7 @@
 
 import { Marker } from "react-map-gl";
 import Pin from "./pin";
-import { useState, useEffect, useMemo } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 interface PinData {
   id: string;
@@ -13,29 +12,11 @@ interface PinData {
 
 export default function MapMarkers({
   setPopupInfo,
+  pinsData,
 }: {
   setPopupInfo: (info: any) => void;
+  pinsData: PinData[];
 }) {
-  const searchParams = useSearchParams();
-  const [pinsData, setPinsData] = useState<PinData[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setPinsData([]);
-      try {
-        const category = searchParams.get("category");
-        const res = await fetch(
-          `/api/pins${category ? `?category=${category}` : ""}`
-        );
-        const pins = await res.json();
-        setPinsData(pins);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [searchParams]);
-
   const pins = useMemo(
     () =>
       pinsData.map((city) => (
