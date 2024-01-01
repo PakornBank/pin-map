@@ -17,6 +17,7 @@ export default function PopupCard({
   const [isEditing, setIsEditing] = useState(false);
   console.log(popupInfo);
   const { data: session, status } = useSession();
+  console.log(session?.user?.id);
   return (
     <>
       {isEditing &&
