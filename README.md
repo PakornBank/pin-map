@@ -6,7 +6,7 @@ Pin-Map is a web application that allows users to create pins on a map for any l
 
 ## Tech Stack
 
-- **Frameworks**: Next.js, Mantine (UI framework)
+- **Frameworks**: Next.js, React, Mantine (UI framework)
 - **Database**: PostgreSQL
 - **Authentication**: NextAuth with GitHub OAuth
 - **Map API**: MapLibre and React Map GL
