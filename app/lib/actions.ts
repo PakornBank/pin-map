@@ -61,7 +61,11 @@ export async function editPin({
 }) {
   try {
     const data =
-      await sql`UPDATE pins SET image_url = ${image_url}, pin_name = ${pin_name}, category = ${category}, is_active = ${is_active}, description = ${description} WHERE id = ${pin_id} RETURNING *`;
+      await sql`WITH updated AS (UPDATE pins SET image_url = ${image_url}, pin_name = ${pin_name}, category = ${category}, is_active = ${is_active}, description = ${description} WHERE id = ${pin_id} RETURNING *)
+      SELECT u.*, upd.*
+      FROM updated upd
+      JOIN users u ON upd.user_id = u.id;`;
+    console.log(data.rows[0]);
     return data.rows[0];
   } catch (error) {
     console.error("Failed to edit pin:", error);
