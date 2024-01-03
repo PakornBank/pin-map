@@ -1,5 +1,6 @@
 import MapComponent from "../ui/map-component";
-import { Box, Flex } from "@mantine/core";
+import { Box, Skeleton } from "@mantine/core";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -11,7 +12,9 @@ export default function Home() {
         display: "inline-block",
       }}
     >
-      <MapComponent></MapComponent>
+      <Suspense fallback={<Skeleton height="100%" width="100%" />}>
+        <MapComponent></MapComponent>
+      </Suspense>
     </Box>
   );
 }
