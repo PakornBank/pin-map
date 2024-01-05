@@ -8,6 +8,7 @@ import {
   Text,
   Box,
   NavLink,
+  LoadingOverlay,
 } from "@mantine/core";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -34,19 +35,20 @@ function ControlPanel(props: ControlPanelProps) {
     handleChangeLong,
   } = props;
 
-  return status === "authenticated" ? (
-    <Stack
-      className="control-panel"
-      style={{ position: "absolute", top: "10px", right: "50px" }}
-      bg={"white"}
-      p={10}
-      gap={5}
-    >
-      <Text size="lg" fw={700}>
-        Pin location
-      </Text>
-      <Text size="md">Drag the screen around</Text>
-      {/* <NumberInput
+  if (status === "authenticated" && session?.user?.id) {
+    return (
+      <Stack
+        className="control-panel"
+        style={{ position: "absolute", top: "10px", right: "50px" }}
+        bg={"white"}
+        p={10}
+        gap={5}
+      >
+        <Text size="lg" fw={700}>
+          Pin location
+        </Text>
+        <Text size="md">Drag the screen around</Text>
+        {/* <NumberInput
         value={round5(latitude)}
         onChange={(newValue) => {
           if (isValidLat(+newValue)) {
@@ -69,23 +71,41 @@ function ControlPanel(props: ControlPanelProps) {
         hideControls
         // {...form.getInputProps("longitude")}
       /> */}
-      <Text size="sm">Latitude</Text>
-      <Text size="md">{round5(latitude)}</Text>
-      <Text size="sm">Longitude</Text>
-      <Text size="md">{round5(longitude)}</Text>
+        <Text size="sm">Latitude</Text>
+        <Text size="md">{round5(latitude)}</Text>
+        <Text size="sm">Longitude</Text>
+        <Text size="md">{round5(longitude)}</Text>
 
-      <Button onClick={handleShowMarker}>Add a pin</Button>
-    </Stack>
-  ) : (
-    <Button
-      style={{ position: "absolute", top: "10px", right: "50px" }}
+        <Button onClick={handleShowMarker}>Add a pin</Button>
+      </Stack>
+    );
+  }
+
+  if (status === "loading" || status === "unauthenticated") {
+    return (
+      <Button
+        style={{ position: "absolute", top: "10px", right: "50px" }}
+        w={180}
+        component={Link}
+        href="/api/auth/signin"
+        color="grey"
+      >
+        Sign in to pin location
+      </Button>
+    );
+  }
+
+  return (
+    <LoadingOverlay
+      visible={true}
+      zIndex={1000}
+      pos={"absolute"}
+      top={"10px"}
+      right={"50px"}
       w={180}
-      component={Link}
-      href="/api/auth/signin"
-      color="grey"
-    >
-      Sign in to pin location
-    </Button>
+      h={100}
+      overlayProps={{ radius: "sm", blur: 2 }}
+    />
   );
 }
 
