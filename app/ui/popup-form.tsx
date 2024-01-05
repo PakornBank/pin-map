@@ -9,24 +9,31 @@ import {
   Checkbox,
   Button,
   Autocomplete,
+  LoadingOverlay,
+  HoverCard,
 } from "@mantine/core";
 import { createPin } from "../lib/actions";
 import { useState, useEffect, use } from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function PopupForm({
   latitude,
   longitude,
   fetchPins,
   setShowMarker,
+  setPopupInfo,
 }: {
   latitude: number;
   longitude: number;
   fetchPins: () => void;
   setShowMarker: (show: boolean) => void;
+  setPopupInfo: (info: any) => void;
 }) {
   const { data: session, status } = useSession();
 
   const [categories, setCategories] = useState([]);
+
+  const [visible, { toggle }] = useDisclosure(false);
 
   const form = useForm({
     initialValues: {
@@ -40,13 +47,16 @@ export default function PopupForm({
   });
 
   const handleSubmit = async (formValues: any) => {
+    toggle();
     formValues.latitude = latitude;
     formValues.longitude = longitude;
     try {
       const res = await createPin(formValues);
       form.reset();
       setShowMarker(false);
+      setPopupInfo(res);
       fetchPins();
+      toggle();
     } catch (error) {
       console.log(error);
     }
@@ -73,14 +83,36 @@ export default function PopupForm({
 
   return (
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+      <LoadingOverlay
+        visible={visible}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
       <Card>
         <Stack gap={10}>
-          <TextInput
-            label="Image URL"
-            placeholder="https://example.com/image.jpg"
-            required
-            {...form.getInputProps("image_url")}
-          />
+          <HoverCard width={300} shadow="md">
+            <HoverCard.Target>
+              <TextInput
+                label="Image URL"
+                placeholder="https://example.com/image.jpg"
+                required
+                {...form.getInputProps("image_url")}
+              />
+            </HoverCard.Target>
+
+            {form.values.image_url && (
+              <HoverCard.Dropdown>
+                <Image
+                  src={form.values.image_url}
+                  alt={form.values.pin_name}
+                  height={100}
+                  width={100}
+                  fit="cover"
+                />
+              </HoverCard.Dropdown>
+            )}
+          </HoverCard>
+
           <TextInput
             label="Pin Name"
             placeholder="Pin Name"
