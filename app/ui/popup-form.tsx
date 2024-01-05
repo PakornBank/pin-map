@@ -77,7 +77,7 @@ export default function PopupForm({
     fetchCategories();
   }, []);
 
-  if (status !== "authenticated") {
+  if (status !== "authenticated" || !session?.user?.id) {
     return <></>;
   }
 
