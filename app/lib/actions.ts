@@ -34,7 +34,10 @@ export async function createPin({
 }) {
   try {
     const data =
-      await sql`INSERT INTO pins (image_url, pin_name, category, is_active, description, user_id, latitude, longitude) VALUES (${image_url}, ${pin_name}, ${category}, ${is_active}, ${description}, ${user_id}, ${latitude}, ${longitude}) RETURNING *`;
+      await sql`WITH updated AS (INSERT INTO pins (image_url, pin_name, category, is_active, description, user_id, latitude, longitude) VALUES (${image_url}, ${pin_name}, ${category}, ${is_active}, ${description}, ${user_id}, ${latitude}, ${longitude}) RETURNING *)
+      SELECT u.*, upd.*
+      FROM updated upd
+      JOIN users u ON upd.user_id = u.id;`;
     const updateUser =
       await sql`UPDATE users SET pin_ids = array_append(pin_ids, ${data.rows[0].id}) WHERE id = ${user_id};`;
     return data.rows[0];
