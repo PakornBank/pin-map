@@ -96,16 +96,17 @@ function ControlPanel(props: ControlPanelProps) {
   }
 
   return (
-    <LoadingOverlay
-      visible={true}
-      zIndex={1000}
-      pos={"absolute"}
-      top={"10px"}
-      right={"50px"}
+    <Box
+      style={{ position: "absolute", top: "10px", right: "50px" }}
       w={180}
       h={100}
-      overlayProps={{ radius: "sm", blur: 2 }}
-    />
+    >
+      <LoadingOverlay
+        zIndex={1000}
+        visible={true}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
+    </Box>
   );
 }
 
