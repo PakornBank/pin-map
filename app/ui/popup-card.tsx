@@ -18,7 +18,7 @@ export default function PopupCard({
   // console.log(popupInfo);
   const { data: session, status } = useSession();
   // console.log(session);
-  console.log("user id", session?.user?.id);
+  console.log(session);
   return (
     <>
       {isEditing &&
