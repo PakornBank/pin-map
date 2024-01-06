@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 
-import NavbarSimple from "../ui/navbar";
+import NavbarSimple from "../../components/navbar";
 
 export default function RootLayout({
   children,

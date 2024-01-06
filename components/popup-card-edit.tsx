@@ -42,7 +42,6 @@ export default function PopupCardEdit({
   const handleSubmit = async (formValues: any) => {
     toggle();
     try {
-      // console.log("formValues", formValues);
       const res = await editPin(formValues);
       console.log("done!", res);
       setIsEditing(false);

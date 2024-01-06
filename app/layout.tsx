@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 
 import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
-import { getServerSession } from "next-auth";
-import SessionProvider from "./components/SessionProvider";
+import SessionProvider from "../components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "Pin-Map",

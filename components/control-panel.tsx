@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  Stack,
-  Input,
-  InputWrapper,
-  Button,
-  NumberInput,
-  Text,
-  Box,
-  NavLink,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Stack, Button, Text, Box, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -21,19 +11,11 @@ interface ControlPanelProps {
   longitude: number;
   latitude: number;
   handleShowMarker: () => void;
-  handleChangeLat: (lat: number) => void;
-  handleChangeLong: (long: number) => void;
 }
 
 function ControlPanel(props: ControlPanelProps) {
   const { data: session, status } = useSession();
-  const {
-    longitude,
-    latitude,
-    handleShowMarker,
-    handleChangeLat,
-    handleChangeLong,
-  } = props;
+  const { longitude, latitude, handleShowMarker } = props;
 
   if (status === "authenticated" && session?.user?.id) {
     return (
@@ -48,29 +30,6 @@ function ControlPanel(props: ControlPanelProps) {
           Pin location
         </Text>
         <Text size="md">Drag the screen around</Text>
-        {/* <NumberInput
-        value={round5(latitude)}
-        onChange={(newValue) => {
-          if (isValidLat(+newValue)) {
-            handleChangeLat(+newValue);
-          }
-        }}
-        label="Latitude"
-        hideControls
-        // {...form.getInputProps("latitude")}
-      />
-      <NumberInput
-        mb={10}
-        value={round5(longitude)}
-        onChange={(newValue) => {
-          if (isValidLong(+newValue)) {
-            handleChangeLong(+newValue);
-          }
-        }}
-        label="Longitude"
-        hideControls
-        // {...form.getInputProps("longitude")}
-      /> */}
         <Text size="sm">Latitude</Text>
         <Text size="md">{round5(latitude)}</Text>
         <Text size="sm">Longitude</Text>

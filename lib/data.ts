@@ -38,3 +38,17 @@ export async function findUserByEmail(email: string) {
     return null;
   }
 }
+
+export async function fetchPinsByCategory(category: string | null) {
+  noStore();
+  try {
+    const res = await fetch(
+      `/api/pins${category ? `?category=${category}` : ""}`,
+      { cache: "no-store" }
+    );
+    const pins = await res.json();
+    return pins;
+  } catch (error) {
+    console.error("Failed to fetch pins:", error);
+  }
+}

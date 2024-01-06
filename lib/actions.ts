@@ -68,7 +68,6 @@ export async function editPin({
       SELECT u.*, upd.*
       FROM updated upd
       JOIN users u ON upd.user_id = u.id;`;
-    console.log(data.rows[0]);
     return data.rows[0];
   } catch (error) {
     console.error("Failed to edit pin:", error);
