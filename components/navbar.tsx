@@ -16,6 +16,7 @@ import {
   Autocomplete,
   Group,
   Avatar,
+  Divider,
 } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -119,6 +120,7 @@ export default function Navbar() {
               {...form.getInputProps("pin_name")}
             />
             <Button type="submit">Search</Button>
+            <Divider />
             <Autocomplete
               label="Select Category"
               placeholder="Pick or enter category"
@@ -138,6 +140,7 @@ export default function Navbar() {
         </form>
 
         <Stack gap={0}>
+          <Divider />
           {status === "authenticated" && (
             <Group wrap="nowrap">
               <Avatar variant="filled" radius={"xl"} src={userIcon}></Avatar>
