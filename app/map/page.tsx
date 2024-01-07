@@ -1,4 +1,4 @@
-import MapComponent from "../../components/map-component";
+import MapComponent from "../../components/mapComponent";
 import { Box, Skeleton } from "@mantine/core";
 import { Suspense } from "react";
 

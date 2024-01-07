@@ -1,7 +1,7 @@
-import PopupCardDisplay from "./popup-card-display";
-import PopupCardDelete from "./popup-card-delete";
+import PopupCardDisplay from "./popupCardDisplay";
+import PopupCardDelete from "./popupCardDelete";
 import { useSession } from "next-auth/react";
-import PopupCardEdit from "./popup-card-edit";
+import PopupCardEdit from "./popupCardEdit";
 import { Group, Button } from "@mantine/core";
 import { useState } from "react";
 

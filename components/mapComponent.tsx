@@ -8,14 +8,14 @@ import Map, {
   Popup,
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import "./maplibregl-popup-content.css";
+import "./maplibreglPopupContent.css";
 import { useSearchParams } from "next/navigation";
 import { LoadingOverlay } from "@mantine/core";
 
-import ControlPanel from "./control-panel";
+import ControlPanel from "./controlPanel";
 import MapMarkers from "./marker";
-import PopupCard from "./popup-card";
-import PopupForm from "./popup-form";
+import PopupCard from "./popupCard";
+import PopupForm from "./popupForm";
 
 import { fetchPinsData } from "@/lib/data";
 

@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { editPin } from "../lib/actions";
 import { useForm } from "@mantine/form";
-import PopupCardDisplay from "./popup-card-display";
+import PopupCardDisplay from "./popupCardDisplay";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function PopupCardEdit({
