@@ -47,7 +47,6 @@ export default function PopupForm({
       category: "",
       description: "",
       is_active: true,
-      user_id: session?.user?.id,
     },
   });
 
@@ -55,6 +54,7 @@ export default function PopupForm({
     toggle();
     formValues.latitude = latitude;
     formValues.longitude = longitude;
+    formValues.user_id = session?.user?.id;
     try {
       const res = await createPin(formValues);
       form.reset();
@@ -63,7 +63,7 @@ export default function PopupForm({
       fetchPins();
       toggle();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
