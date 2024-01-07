@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
-import SessionProvider from "../components/sessionProvider";
+import Provider from "../components/sessionProvider";
 
 export const metadata: Metadata = {
   title: "Pin-Map",
@@ -21,7 +21,7 @@ export default async function RootLayout({
       </head>
       <body>
         <MantineProvider>
-          <SessionProvider>{children}</SessionProvider>
+          <Provider>{children}</Provider>
         </MantineProvider>
       </body>
     </html>
