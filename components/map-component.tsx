@@ -17,7 +17,7 @@ import MapMarkers from "./marker";
 import PopupCard from "./popup-card";
 import PopupForm from "./popup-form";
 
-import { fetchPinsByCategory } from "@/lib/data";
+import { fetchPinsData } from "@/lib/data";
 
 export default function MapComponent() {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -41,7 +41,9 @@ export default function MapComponent() {
     setIsLoading(true);
     try {
       const category = searchParams.get("category");
-      const pins = await fetchPinsByCategory(category);
+      const user = searchParams.get("user");
+      const pin_name = searchParams.get("pin_name");
+      const pins = await fetchPinsData(category, user, pin_name);
       setPinsData(pins);
     } catch (error) {
       console.error(error);
