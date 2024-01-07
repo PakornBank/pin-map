@@ -11,11 +11,12 @@ interface ControlPanelProps {
   longitude: number;
   latitude: number;
   handleShowCreateForm: () => void;
+  showCreateForm: boolean;
 }
 
 function ControlPanel(props: ControlPanelProps) {
   const { data: session, status } = useSession();
-  const { longitude, latitude, handleShowCreateForm } = props;
+  const { longitude, latitude, handleShowCreateForm, showCreateForm } = props;
 
   if (status === "authenticated" && session?.user?.id) {
     return (
@@ -34,8 +35,13 @@ function ControlPanel(props: ControlPanelProps) {
         <Text size="md">{round5(latitude)}</Text>
         <Text size="sm">Longitude</Text>
         <Text size="md">{round5(longitude)}</Text>
-
-        <Button onClick={handleShowCreateForm}>Add a pin</Button>
+        {showCreateForm ? (
+          <Button onClick={handleShowCreateForm} color="red">
+            Cancel
+          </Button>
+        ) : (
+          <Button onClick={handleShowCreateForm}>Add a pin</Button>
+        )}
       </Stack>
     );
   }

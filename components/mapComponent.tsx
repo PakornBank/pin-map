@@ -116,6 +116,7 @@ export default function MapComponent() {
         longitude={viewState.longitude}
         latitude={viewState.latitude}
         handleShowCreateForm={handleShowCreateForm}
+        showCreateForm={showCreateForm}
       />
     </>
   );
