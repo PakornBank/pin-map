@@ -21,6 +21,7 @@ export default function MapMarkers({
     () =>
       pinsData.map((city) => (
         <Marker
+          style={{ zIndex: 10 }}
           key={city.id}
           longitude={city.longitude}
           latitude={city.latitude}
