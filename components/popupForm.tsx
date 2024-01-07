@@ -106,7 +106,7 @@ export default function PopupForm({
           />
           <Card>
             <Stack gap={10}>
-              <HoverCard width={300} shadow="md">
+              <HoverCard width={300} shadow="md" position="top">
                 <HoverCard.Target>
                   <TextInput
                     label="Image URL"
