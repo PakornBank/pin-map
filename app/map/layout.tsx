@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 
-import NavbarSimple from "../../components/navbar";
+import Navbar from "../../components/navbar";
 
 export default function RootLayout({
   children,
@@ -15,7 +15,7 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider>
-          <NavbarSimple />
+          <Navbar />
           {children}
         </MantineProvider>
       </body>
