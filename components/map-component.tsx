@@ -10,6 +10,7 @@ import Map, {
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./maplibregl-popup-content.css";
 import { useSearchParams } from "next/navigation";
+import { LoadingOverlay } from "@mantine/core";
 
 import ControlPanel from "./control-panel";
 import MapMarkers from "./marker";
@@ -21,6 +22,7 @@ import { fetchPinsByCategory } from "@/lib/data";
 export default function MapComponent() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleShowCreateForm = () => {
     setShowCreateForm(!showCreateForm);
@@ -36,16 +38,19 @@ export default function MapComponent() {
   const [pinsData, setPinsData] = useState([]);
 
   const fetchPins = async () => {
+    setIsLoading(true);
     try {
       const category = searchParams.get("category");
       const pins = await fetchPinsByCategory(category);
       setPinsData(pins);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    setPinsData([]);
     fetchPins();
   }, [searchParams]);
 
@@ -58,6 +63,11 @@ export default function MapComponent() {
 
   return (
     <>
+      <LoadingOverlay
+        visible={isLoading}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
       <Map
         style={{
           height: "100%",
