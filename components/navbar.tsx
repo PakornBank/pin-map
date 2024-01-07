@@ -19,29 +19,39 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "@mantine/form";
 
-export default function NavbarSimple() {
+import { fetchCategories } from "@/lib/data";
+import { fetchUsers } from "@/lib/data";
+import { fetchPinsList } from "@/lib/data";
+
+export default function Navbar() {
   const { data: session, status } = useSession();
   const userName = session?.user?.name;
   const userIcon = session?.user?.image;
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const form = useForm({
-    initialValues: { category: "" },
+    initialValues: {
+      category: searchParams.get("category") || "",
+      user: searchParams.get("user") || "",
+      pin_name: searchParams.get("pin_name") || "",
+    },
   });
 
-  const router = useRouter();
-
   const [categories, setCategories] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [pinsList, setPinsList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/category`, { cache: "no-store" });
-        let categories = await res.json();
-        categories = categories.map((category: { category: string }) => {
-          return category.category;
-        });
+        const categories = await fetchCategories();
         setCategories(categories);
+        const users = await fetchUsers();
+        setUsers(users);
       } catch (error) {
         console.error(error);
       }
@@ -49,8 +59,41 @@ export default function NavbarSimple() {
     fetchData();
   }, []);
 
-  const handleSubmit = (category: string) => {
-    router.push(category.length > 0 ? `?category=${category}` : "?");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const category = searchParams.get("category");
+        const user = searchParams.get("user");
+        const pin_name = searchParams.get("pin_name");
+        const pins = await fetchPinsList(category, user, pin_name);
+        setPinsList(pins);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [searchParams]);
+
+  const handleSubmit = ({
+    category,
+    user,
+    pin_name,
+  }: {
+    category: string;
+    user: string;
+    pin_name: string;
+  }) => {
+    const params = new URLSearchParams();
+    if (category.length > 0) {
+      params.set("category", category);
+    }
+    if (user.length > 0) {
+      params.set("user", user);
+    }
+    if (pin_name.length > 0) {
+      params.set("pin_name", pin_name);
+    }
+    router.push("map?" + params.toString());
   };
 
   return (
@@ -66,10 +109,16 @@ export default function NavbarSimple() {
         style={{ zIndex: 10 }}
         px={10}
       >
-        <form
-          onSubmit={form.onSubmit((values) => handleSubmit(values.category))}
-        >
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
           <Stack gap={"md"}>
+            <Autocomplete
+              label="Search"
+              placeholder="Search"
+              maxDropdownHeight={200}
+              data={pinsList}
+              {...form.getInputProps("pin_name")}
+            />
+            <Button type="submit">Search</Button>
             <Autocomplete
               label="Select Category"
               placeholder="Pick or enter category"
@@ -77,7 +126,14 @@ export default function NavbarSimple() {
               maxDropdownHeight={200}
               {...form.getInputProps("category")}
             />
-            <Button type="submit">Search</Button>
+            <Autocomplete
+              label="Select User"
+              placeholder="Pick or enter user"
+              data={users}
+              maxDropdownHeight={200}
+              {...form.getInputProps("user")}
+            />
+            <Button type="submit">Apply filter</Button>
           </Stack>
         </form>
 
