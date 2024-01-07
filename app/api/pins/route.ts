@@ -1,13 +1,13 @@
 import { sql } from "@vercel/postgres";
 import { unstable_noStore as noStore } from "next/cache";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   noStore();
   try {
-    const query = new URL(request.url).searchParams;
-    const category: string = query.get("category") || "";
-    const user: string = query.get("user") || "";
-    const pin_name: string = query.get("pin_name") || "";
+    const req = await request.json();
+    const category = req.category || "";
+    const user = req.user || "";
+    const pin_name = req.pin_name || "";
     const data = await sql`
     SELECT pins.*, users.name 
     FROM pins 
