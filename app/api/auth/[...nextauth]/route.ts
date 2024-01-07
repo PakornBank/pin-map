@@ -31,10 +31,13 @@ const authOptions: NextAuthOptions = {
     },
 
     async session({ session, user }) {
-      console.log("session", session, "user", user);
       const existingUser = await findUserByEmail(session?.user?.email ?? "");
       if (existingUser) {
-        session.user.id = existingUser.id;
+        const newSession = {
+          ...session,
+          user: { ...session.user, id: existingUser?.id },
+        };
+        return newSession;
       }
       return session;
     },
