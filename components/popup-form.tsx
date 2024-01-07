@@ -11,10 +11,13 @@ import {
   Autocomplete,
   LoadingOverlay,
   HoverCard,
+  Box,
 } from "@mantine/core";
 import { createPin } from "../lib/actions";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
+
+import CenterPin from "./centerPin";
 
 export default function PopupForm({
   latitude,
@@ -22,12 +25,14 @@ export default function PopupForm({
   fetchPins,
   setShowCreateForm,
   setPopupInfo,
+  showCreateForm,
 }: {
   latitude: number;
   longitude: number;
   fetchPins: () => void;
   setShowCreateForm: (show: boolean) => void;
   setPopupInfo: (info: any) => void;
+  showCreateForm: boolean;
 }) {
   const { data: session, status } = useSession();
 
@@ -77,78 +82,91 @@ export default function PopupForm({
     fetchCategories();
   }, []);
 
-  if (status !== "authenticated" || !session?.user?.id) {
+  if (status !== "authenticated" || !session?.user?.id || !showCreateForm) {
     return <></>;
   }
 
   return (
-    <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-      <LoadingOverlay
-        visible={visible}
-        zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
-      />
-      <Card>
-        <Stack gap={10}>
-          <HoverCard width={300} shadow="md">
-            <HoverCard.Target>
+    <>
+      <CenterPin />
+      <Box
+        pos={"absolute"}
+        style={{
+          zIndex: 10,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, 15px)",
+        }}
+      >
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+          <LoadingOverlay
+            visible={visible}
+            zIndex={1000}
+            overlayProps={{ radius: "sm", blur: 2 }}
+          />
+          <Card>
+            <Stack gap={10}>
+              <HoverCard width={300} shadow="md">
+                <HoverCard.Target>
+                  <TextInput
+                    label="Image URL"
+                    placeholder="https://example.com/image.jpg"
+                    required
+                    {...form.getInputProps("image_url")}
+                  />
+                </HoverCard.Target>
+
+                {form.values.image_url && (
+                  <HoverCard.Dropdown>
+                    <Image
+                      src={form.values.image_url}
+                      alt={form.values.pin_name}
+                      height={100}
+                      width={100}
+                      fit="cover"
+                    />
+                  </HoverCard.Dropdown>
+                )}
+              </HoverCard>
+
               <TextInput
-                label="Image URL"
-                placeholder="https://example.com/image.jpg"
+                label="Pin Name"
+                placeholder="Pin Name"
                 required
-                {...form.getInputProps("image_url")}
+                {...form.getInputProps("pin_name")}
               />
-            </HoverCard.Target>
-
-            {form.values.image_url && (
-              <HoverCard.Dropdown>
-                <Image
-                  src={form.values.image_url}
-                  alt={form.values.pin_name}
-                  height={100}
-                  width={100}
-                  fit="cover"
-                />
-              </HoverCard.Dropdown>
-            )}
-          </HoverCard>
-
-          <TextInput
-            label="Pin Name"
-            placeholder="Pin Name"
-            required
-            {...form.getInputProps("pin_name")}
-          />
-          <TextInput
-            label="Description"
-            placeholder="Description"
-            required
-            {...form.getInputProps("description")}
-          />
-          <Autocomplete
-            label="Select Category"
-            placeholder="Pick or enter category"
-            required
-            data={categories}
-            maxDropdownHeight={200}
-            {...form.getInputProps("category")}
-          />
-          <Flex direction="row" gap={10}>
-            <Checkbox
-              label="Active"
-              checked={form.values.is_active}
-              // onChange={(event) => {
-              //   form.setFieldValue("is_active", event.currentTarget.checked);
-              // }}
-              {...form.getInputProps("is_active")}
-            ></Checkbox>
-          </Flex>
-          <Flex direction="row" gap={10}>
-            <Button type="submit">Submit</Button>
-            <Button type="reset">Reset</Button>
-          </Flex>
-        </Stack>
-      </Card>
-    </form>
+              <TextInput
+                label="Description"
+                placeholder="Description"
+                required
+                {...form.getInputProps("description")}
+              />
+              <Autocomplete
+                label="Select Category"
+                placeholder="Pick or enter category"
+                required
+                data={categories}
+                maxDropdownHeight={200}
+                {...form.getInputProps("category")}
+              />
+              <Flex direction="row" gap={10}>
+                <Checkbox
+                  label="Active"
+                  color="green"
+                  checked={form.values.is_active}
+                  {...form.getInputProps("is_active")}
+                ></Checkbox>
+              </Flex>
+              <Flex direction="row" gap={10}>
+                <Button type="submit">Submit</Button>
+                <Button color="red" type="reset">
+                  Reset
+                </Button>
+              </Flex>
+            </Stack>
+          </Card>
+        </form>
+      </Box>
+    </>
   );
 }

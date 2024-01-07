@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import Map, {
-  Marker,
   NavigationControl,
   GeolocateControl,
   Popup,
@@ -13,11 +12,10 @@ import "./maplibregl-popup-content.css";
 import { useSearchParams } from "next/navigation";
 
 import ControlPanel from "./control-panel";
-import Pin from "./pin";
 import MapMarkers from "./marker";
 import PopupCard from "./popup-card";
 import PopupForm from "./popup-form";
-import { Box } from "@mantine/core";
+
 import { fetchPinsByCategory } from "@/lib/data";
 
 export default function MapComponent() {
@@ -70,36 +68,15 @@ export default function MapComponent() {
         mapStyle="https://api.maptiler.com/maps/streets/style.json?key=g9SJCPMB2ji0vRCDxrAw"
         onMove={(e) => setViewState(e.viewState)}
       >
-        {showCreateForm ? (
-          <>
-            <Marker
-              longitude={viewState.longitude}
-              latitude={viewState.latitude}
-              anchor="bottom"
-            >
-              <Pin size={20} />
-            </Marker>
-            <Box
-              pos={"absolute"}
-              style={{
-                zIndex: 10,
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, 15px)",
-              }}
-            >
-              <PopupForm
-                latitude={viewState.latitude}
-                longitude={viewState.longitude}
-                fetchPins={fetchPins}
-                setShowCreateForm={setShowCreateForm}
-                setPopupInfo={setPopupInfo}
-              ></PopupForm>
-            </Box>
-          </>
-        ) : (
-          <></>
-        )}
+        <PopupForm
+          latitude={viewState.latitude}
+          longitude={viewState.longitude}
+          fetchPins={fetchPins}
+          setShowCreateForm={setShowCreateForm}
+          setPopupInfo={setPopupInfo}
+          showCreateForm={showCreateForm}
+        />
+
         <MapMarkers setPopupInfo={setPopupInfo} pinsData={pinsData} />
         {popupInfo && (
           <Popup
