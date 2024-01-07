@@ -21,13 +21,12 @@ export default function PopupCardDelete({
     toggle();
     try {
       const res = await deletePin(popupId, userId);
-      // console.log("done!", res);
       setIsDeleting(false);
       setPopupInfo(null);
       fetchPins();
       toggle();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (

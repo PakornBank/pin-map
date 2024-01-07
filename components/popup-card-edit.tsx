@@ -43,13 +43,12 @@ export default function PopupCardEdit({
     toggle();
     try {
       const res = await editPin(formValues);
-      console.log("done!", res);
       setIsEditing(false);
       fetchPins();
       setPopupInfo(res);
       toggle();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

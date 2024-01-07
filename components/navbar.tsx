@@ -43,7 +43,7 @@ export default function NavbarSimple() {
         });
         setCategories(categories);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
