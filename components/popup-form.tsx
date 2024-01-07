@@ -20,13 +20,13 @@ export default function PopupForm({
   latitude,
   longitude,
   fetchPins,
-  setShowMarker,
+  setShowCreateForm,
   setPopupInfo,
 }: {
   latitude: number;
   longitude: number;
   fetchPins: () => void;
-  setShowMarker: (show: boolean) => void;
+  setShowCreateForm: (show: boolean) => void;
   setPopupInfo: (info: any) => void;
 }) {
   const { data: session, status } = useSession();
@@ -53,7 +53,7 @@ export default function PopupForm({
     try {
       const res = await createPin(formValues);
       form.reset();
-      setShowMarker(false);
+      setShowCreateForm(false);
       setPopupInfo(res);
       fetchPins();
       toggle();

@@ -10,12 +10,12 @@ function round5(value: number) {
 interface ControlPanelProps {
   longitude: number;
   latitude: number;
-  handleShowMarker: () => void;
+  handleShowCreateForm: () => void;
 }
 
 function ControlPanel(props: ControlPanelProps) {
   const { data: session, status } = useSession();
-  const { longitude, latitude, handleShowMarker } = props;
+  const { longitude, latitude, handleShowCreateForm } = props;
 
   if (status === "authenticated" && session?.user?.id) {
     return (
@@ -35,7 +35,7 @@ function ControlPanel(props: ControlPanelProps) {
         <Text size="sm">Longitude</Text>
         <Text size="md">{round5(longitude)}</Text>
 
-        <Button onClick={handleShowMarker}>Add a pin</Button>
+        <Button onClick={handleShowCreateForm}>Add a pin</Button>
       </Stack>
     );
   }

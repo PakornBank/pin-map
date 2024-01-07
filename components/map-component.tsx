@@ -21,11 +21,11 @@ import { Box } from "@mantine/core";
 import { fetchPinsByCategory } from "@/lib/data";
 
 export default function MapComponent() {
-  const [showMarker, setShowMarker] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [popupInfo, setPopupInfo] = useState(null);
 
-  const handleShowMarker = () => {
-    setShowMarker(!showMarker);
+  const handleShowCreateForm = () => {
+    setShowCreateForm(!showCreateForm);
   };
 
   const [viewState, setViewState] = useState({
@@ -70,7 +70,7 @@ export default function MapComponent() {
         mapStyle="https://api.maptiler.com/maps/streets/style.json?key=g9SJCPMB2ji0vRCDxrAw"
         onMove={(e) => setViewState(e.viewState)}
       >
-        {showMarker ? (
+        {showCreateForm ? (
           <>
             <Marker
               longitude={viewState.longitude}
@@ -92,7 +92,7 @@ export default function MapComponent() {
                 latitude={viewState.latitude}
                 longitude={viewState.longitude}
                 fetchPins={fetchPins}
-                setShowMarker={setShowMarker}
+                setShowCreateForm={setShowCreateForm}
                 setPopupInfo={setPopupInfo}
               ></PopupForm>
             </Box>
@@ -126,7 +126,7 @@ export default function MapComponent() {
       <ControlPanel
         longitude={viewState.longitude}
         latitude={viewState.latitude}
-        handleShowMarker={handleShowMarker}
+        handleShowCreateForm={handleShowCreateForm}
       />
     </>
   );
