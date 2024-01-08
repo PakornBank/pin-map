@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import {
-  IconGauge,
-  IconFingerprint,
-  IconActivity,
-  IconChevronRight,
-} from "@tabler/icons-react";
+import { IconChevronRight } from "@tabler/icons-react";
 import {
   Button,
   Flex,
@@ -17,7 +12,9 @@ import {
   Group,
   Avatar,
   Divider,
+  Burger,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -45,6 +42,8 @@ export default function Navbar() {
   const [categories, setCategories] = useState([]);
   const [users, setUsers] = useState([]);
   const [pinsList, setPinsList] = useState([]);
+  const [isHidden, setIsHidden] = useState(true);
+  const smallDisplay = useMediaQuery("(max-width: 830px)");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,6 +98,16 @@ export default function Navbar() {
 
   return (
     <>
+      <Burger
+        pos={"absolute"}
+        top={15}
+        left={5}
+        size={"lg"}
+        opened={!isHidden}
+        onClick={() => setIsHidden(!isHidden)}
+        display={smallDisplay ? "flex" : "none"}
+        style={{ zIndex: 4 }}
+      ></Burger>
       <Flex
         direction="column"
         py={10}
@@ -107,11 +116,12 @@ export default function Navbar() {
         bg={"white"}
         justify={"space-between"}
         pos={"absolute"}
-        style={{ zIndex: 10 }}
+        style={{ zIndex: 3 }}
         px={10}
+        display={smallDisplay ? (isHidden ? "none" : "flex") : "flex"}
       >
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-          <Stack gap={"md"}>
+          <Stack gap={"md"} pt={30}>
             <Autocomplete
               label="Search"
               placeholder="Search"
