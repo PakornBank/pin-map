@@ -1,4 +1,4 @@
-import { Card, Image, Text, Badge, Group } from "@mantine/core";
+import { Card, Image, Text, Badge, Group, Spoiler } from "@mantine/core";
 import { formatDateTime } from "../lib/utils";
 
 export default function PopupCardDisplay({ popupInfo }: { popupInfo: any }) {
@@ -13,7 +13,9 @@ export default function PopupCardDisplay({ popupInfo }: { popupInfo: any }) {
           fit="cover"
         />
       </Card.Section>
-      <Text fw={500}>{popupInfo.pin_name}</Text>
+      <Text fw={500} size="lg">
+        {popupInfo.pin_name}
+      </Text>
       <Group gap={5}>
         <Badge color="pink">{popupInfo.category}</Badge>
         {popupInfo.is_active && <Badge color="green">Active</Badge>}
@@ -23,13 +25,15 @@ export default function PopupCardDisplay({ popupInfo }: { popupInfo: any }) {
           ))}
       </Group>
 
-      <Text size="sm" c="dimmed">
-        {popupInfo.description}
-      </Text>
-      <Text size="sm" c="dimmed">
+      <Spoiler maxHeight={120} showLabel="Show more" hideLabel="Hide">
+        <Text c="dimmed" size="md">
+          {popupInfo.description}
+        </Text>
+      </Spoiler>
+      <Text size="md" c="dimmed">
         updated {formatDateTime(popupInfo.updated_at)}
       </Text>
-      <Text size="sm" c="dimmed">
+      <Text size="md" c="dimmed">
         by {popupInfo.name}
       </Text>
     </Card>
