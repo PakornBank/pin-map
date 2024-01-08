@@ -20,29 +20,34 @@ function ControlPanel(props: ControlPanelProps) {
 
   if (status === "authenticated" && session?.user?.id) {
     return (
-      <Stack
-        className="control-panel"
-        style={{ position: "absolute", top: "10px", right: "50px" }}
+      <Box
         bg={"white"}
-        p={10}
-        gap={5}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "50px",
+          borderRadius: "5px",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        }}
       >
-        <Text size="lg" fw={700}>
-          Pin location
-        </Text>
-        <Text size="md">Drag the screen around</Text>
-        <Text size="sm">Latitude</Text>
-        <Text size="md">{round5(latitude)}</Text>
-        <Text size="sm">Longitude</Text>
-        <Text size="md">{round5(longitude)}</Text>
-        {showCreateForm ? (
-          <Button onClick={handleShowCreateForm} color="red">
-            Cancel
-          </Button>
-        ) : (
-          <Button onClick={handleShowCreateForm}>Add a pin</Button>
-        )}
-      </Stack>
+        <Stack className="control-panel" p={10} gap={5}>
+          <Text size="lg" fw={700}>
+            Pin location
+          </Text>
+          <Text size="md">Drag the screen around</Text>
+          <Text size="sm">Latitude</Text>
+          <Text size="md">{round5(latitude)}</Text>
+          <Text size="sm">Longitude</Text>
+          <Text size="md">{round5(longitude)}</Text>
+          {showCreateForm ? (
+            <Button onClick={handleShowCreateForm} color="red">
+              Cancel
+            </Button>
+          ) : (
+            <Button onClick={handleShowCreateForm}>Add a pin</Button>
+          )}
+        </Stack>
+      </Box>
     );
   }
 
