@@ -26,14 +26,14 @@ export default function PopupCardDisplay({ popupInfo }: { popupInfo: any }) {
       </Group>
 
       <Spoiler maxHeight={120} showLabel="Show more" hideLabel="Hide">
-        <Text c="dimmed" size="md">
+        <Text c="#555" size="md">
           {popupInfo.description}
         </Text>
       </Spoiler>
       <Text size="md" c="dimmed">
         updated {formatDateTime(popupInfo.updated_at)}
       </Text>
-      <Text size="md" c="dimmed">
+      <Text size="md" c="darkgray">
         by {popupInfo.name}
       </Text>
     </Card>
